@@ -9,12 +9,17 @@ python3 -m venv venv
 
 ### activeer de venv, installeer de requirements en run de applicatie.
 
-. venv/bin/activate
+mac/linux: . venv/bin/activate
+windows: .\venv\Scripts\activate
 
 pip install -r requirements.txt
 
-export FLASK_APP=filmfan.py
+windows:
+SET FLASK_APP=filmfan.py
+SET FLASK_ENV=development
 
+linux/mac:
+export FLASK_APP=filmfan.py
 export FLASK_ENV=development
 
 flask run
