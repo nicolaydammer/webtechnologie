@@ -22,4 +22,6 @@ linux/mac:
 export FLASK_APP=filmfan.py
 export FLASK_ENV=development
 
+pip install -r requirements.txt
+
 flask run
