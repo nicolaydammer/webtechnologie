@@ -1,1 +1,36 @@
-<p>register here</p>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <form method="post" class="text-center">
+                {{ form.hidden_tag() }}
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    {{ form.email.label }} {{ form.email }}
+                </div>
+
+                <div class="form-outline mb-4" style="margin-left: -28px">
+                    {{ form.username.label }} {{ form.username }}
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                    {{ form.password.label }} {{ form.password }}
+                </div>
+
+                <div class="text-center">
+                    {{ form.submit() }}
+                </div>
+
+                <br/>
+                <br/>
+
+                <!-- Register buttons -->
+                <div class="text-center">
+                    <p>Heb je al een account? <a href="{{ url_for('login') }}">Log hier in!</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
