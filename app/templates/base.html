@@ -11,6 +11,10 @@
 <body>
 {% include "partials/header.html" %}
 
+{% if page == "home" %}
+    {% include "home.html" %}
+{% endif %}
+
 {% if page == "login" %}
     {% include "login.html" %}
 {% endif %}
