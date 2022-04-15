@@ -1,12 +1,6 @@
-from flask_bcrypt import check_password_hash
 from flask_login import UserMixin
-from app import db, LoginManager
+from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-@LoginManager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
 
 
 class User(db.Model, UserMixin):

@@ -1,5 +1,11 @@
 from flask import render_template, request
-from app import app
+from app import app, login_manager
+from .Models import User
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 
 @app.route('/')
