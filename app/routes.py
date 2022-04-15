@@ -1,6 +1,7 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from app import app, login_manager
 from .Models import User
+from .forms.LoginForm import LoginForm
 
 
 @login_manager.user_loader
@@ -9,7 +10,7 @@ def load_user(user_id):
 
 
 @app.route('/')
-def index():
+def home():
     return render_template(
         'base.html',
         title="Filmfan homepage",
@@ -46,14 +47,17 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return render_template(
-            'base.html',
-            title="Filmfan login pagina",
-            page="login"
-        )
-    if request.method == 'POST':
-        return 'hi'
+    loginform = LoginForm()
+    if loginform.validate_on_submit():
+        # inloggen
+        return redirect("https://google.nl")
+
+    return render_template(
+        'base.html',
+        title="Filmfan login pagina",
+        page="login",
+        form=loginform
+    )
 
 
 @app.route('/register', methods=['GET', 'POST'])

@@ -20,3 +20,4 @@ with app.app_context():
     from . import routes
 
     db.create_all()
+

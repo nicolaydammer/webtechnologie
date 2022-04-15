@@ -9,6 +9,7 @@ Flask==2.0.3
 Flask-Bcrypt==1.0.1
 Flask-Login==0.6.0
 Flask-SQLAlchemy==2.5.1
+Flask-WTF==1.0.1
 greenlet==1.1.2
 idna==3.3
 itsdangerous==2.1.0
@@ -21,4 +22,5 @@ six==1.16.0
 SQLAlchemy==1.4.35
 urllib3==1.26.9
 Werkzeug==2.0.3
+WTForms==3.0.1
 yarg==0.1.9
