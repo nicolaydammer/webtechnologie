@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from app import app
 
 
@@ -38,19 +38,25 @@ def index():
     )
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template(
-        'base.html',
-        title="Filmfan login pagina",
-        page="login"
-    )
+    if request.method == 'GET':
+        return render_template(
+            'base.html',
+            title="Filmfan login pagina",
+            page="login"
+        )
+    if request.method == 'POST':
+        return 'hi'
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template(
-        'base.html',
-        title="Filmfan register pagina",
-        page="register"
-    )
+    if request.method == 'GET':
+        return render_template(
+            'base.html',
+            title="Filmfan register pagina",
+            page="register"
+        )
+    if request.method == 'POST':
+        return 'hi'
