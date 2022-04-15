@@ -2,6 +2,8 @@ from app import db
 
 
 class Film(db.Model):
+    __tablename__ = 'films'
+
     id = db.Column(db.Integer, primary_key=True)
     titel = db.Column(db.String(50))
     regisseur = db.relationship('Regisseur', backref='film', uselist=False)
