@@ -50,7 +50,7 @@ def login():
     loginform = LoginForm()
     if loginform.validate_on_submit():
         # inloggen
-        return redirect("https://google.nl")
+        return redirect(url_for('home'))
 
     return render_template(
         'base.html',
