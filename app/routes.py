@@ -149,3 +149,26 @@ def modify_film():
         film.regisseur = regisseur
         db.session.add(film)
         db.session.commit()
+
+@app.route('/acteur', methods=['GET', 'POST'])
+@login_required
+def create_acteur():
+    create_acteur_form = CreateActeur()
+    form = request.form
+
+    if create_acteur_form.validate_on_submit():
+        voornaam = form.get('voornaam')
+        achternaam = form.get('achternaam')
+
+        acteur = Acteur(voornaam, achternaam)
+
+        db.session.add(acteur)
+        db.session.commit()
+        return redirect(url_for('home'))
+
+    return render_template(
+        'base.html',
+        title="Filmfan acteur toevoegen",
+        page="acteur_aanmaken",
+        form=create_acteur_form
+    )

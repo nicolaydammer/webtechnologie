@@ -4,11 +4,11 @@ from app.Models.Acteur import Acteur
 from app.Models.Regisseur import Regisseur
 from wtforms.validators import DataRequired, ValidationError
 
-regisseurs = Regisseur.query.all()
-acteurs = Acteur.query.all()
-
 
 class CreateFilm(FlaskForm):
+    regisseurs = Regisseur.query.all()
+    acteurs = Acteur.query.all()
+
     titel = StringField('Titel:', validators=[DataRequired()])
     regisseur = SelectField('Regisseur:', choices=regisseurs, validators=[DataRequired()])
     acteur = SelectField('Acteur:', choices=acteurs, validators=[DataRequired()])
