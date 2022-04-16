@@ -6,6 +6,8 @@ from .Models.Acteur import Acteur
 from .Models.Film import Film
 from .Models.Regisseur import Regisseur
 from .Models.User import User
+from .forms.CreateActeur import CreateActeur
+from .forms.CreateRegisseur import CreateRegisseur
 from .forms.CreateFilm import CreateFilm
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
@@ -79,7 +81,7 @@ def register():
         user = User(email, username, password)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))
 
     return render_template(
         'base.html',
@@ -103,11 +105,7 @@ def create_film():
     form = request.form
 
     if create_film_form.validate_on_submit():
-        acteur = Acteur.query.filter_by(id=form.get('acteurId'))
-        regisseur = Regisseur.query.filter_by(id=form.get('regisseurId'))
-
-        film = Film(form.get('titel'), regisseur, acteur)
-
+        film = Film(form.get('titel'), form.get('regisseur'), form.get('acteur'))
         db.session.add(film)
         db.session.commit()
         return redirect(url_for('film', id=film.id))
@@ -150,6 +148,7 @@ def modify_film():
         db.session.add(film)
         db.session.commit()
 
+
 @app.route('/acteur', methods=['GET', 'POST'])
 @login_required
 def create_acteur():
@@ -171,4 +170,28 @@ def create_acteur():
         title="Filmfan acteur toevoegen",
         page="acteur_aanmaken",
         form=create_acteur_form
+    )
+
+
+@app.route('/regisseur', methods=['GET', 'POST'])
+@login_required
+def create_regisseur():
+    create_regisseur_form = CreateRegisseur()
+    form = request.form
+
+    if create_regisseur_form.validate_on_submit():
+        voornaam = form.get('voornaam')
+        achternaam = form.get('achternaam')
+
+        regisseur = Regisseur(voornaam, achternaam)
+
+        db.session.add(regisseur)
+        db.session.commit()
+        return redirect(url_for('home'))
+
+    return render_template(
+        'base.html',
+        title="Filmfan acteur toevoegen",
+        page="acteur_aanmaken",
+        form=create_regisseur_form
     )

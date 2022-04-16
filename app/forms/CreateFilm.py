@@ -6,12 +6,15 @@ from wtforms.validators import DataRequired, ValidationError
 
 
 class CreateFilm(FlaskForm):
-    regisseurs = Regisseur.query.all()
-    acteurs = Acteur.query.all()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.acteur.choices = [(acteur.id, acteur.voornaam + ' ' + acteur.achternaam) for acteur in Acteur.query.all()]
+        self.regisseur.choices = [(regisseur.id, regisseur.voornaam + ' ' + regisseur.achternaam) for regisseur in
+                                  Regisseur.query.all()]
 
     titel = StringField('Titel:', validators=[DataRequired()])
-    regisseur = SelectField('Regisseur:', choices=regisseurs, validators=[DataRequired()])
-    acteur = SelectField('Acteur:', choices=acteurs, validators=[DataRequired()])
+    regisseur = SelectField('Regisseur:', coerce=int, validators=[DataRequired()])
+    acteur = SelectField('Acteur:', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Toevoegen')
 
     def validate_regisseur(self, field):
@@ -19,5 +22,5 @@ class CreateFilm(FlaskForm):
             raise ValidationError('Deze regisseur bestaat niet')
 
     def validate_acteur(self, field):
-        if Regisseur.query.filter_by(id=field.data):
+        if not Regisseur.query.filter_by(id=field.data):
             raise ValidationError('Deze regisseur bestaat niet')
