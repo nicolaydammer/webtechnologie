@@ -12,8 +12,6 @@ python3 -m venv venv
 mac/linux: . venv/bin/activate
 windows: .\venv\Scripts\activate
 
-pip install -r requirements.txt
-
 windows:
 SET FLASK_APP=filmfan.py
 SET FLASK_ENV=development

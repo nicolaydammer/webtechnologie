@@ -6,8 +6,8 @@ class Film(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     titel = db.Column(db.String(50))
-    regisseur = db.relationship('Regisseur', backref='film', uselist=False)
-    acteur = db.relationship('Acteur', backref='film', uselist=False)
+    regisseur = db.Column(db.Integer, db.ForeignKey('regisseurs.id'))
+    acteur = db.Column(db.Integer, db.ForeignKey('acteurs.id'))
 
     def __init__(self, titel, regisseur, acteur):
         self.titel = titel

@@ -2,7 +2,11 @@ from flask import render_template, redirect, url_for, request
 from flask_login import login_user, login_required, logout_user
 
 from app import app, login_manager, db
+from .Models.Acteur import Acteur
+from .Models.Film import Film
+from .Models.Regisseur import Regisseur
 from .Models.User import User
+from .forms.CreateFilm import CreateFilm
 from .forms.LoginForm import LoginForm
 from .forms.RegisterForm import RegisterForm
 
@@ -75,7 +79,7 @@ def register():
         user = User(email, username, password)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
 
     return render_template(
         'base.html',
@@ -89,4 +93,59 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return "Success"
+
+
+@app.route('/film', methods=['GET', 'POST'])
+@login_required
+def create_film():
+    create_film_form = CreateFilm()
+    form = request.form
+
+    if create_film_form.validate_on_submit():
+        acteur = Acteur.query.filter_by(id=form.get('acteurId'))
+        regisseur = Regisseur.query.filter_by(id=form.get('regisseurId'))
+
+        film = Film(form.get('titel'), regisseur, acteur)
+
+        db.session.add(film)
+        db.session.commit()
+        return redirect(url_for('film', id=film.id))
+
+    return render_template(
+        'base.html',
+        title="Filmfan film toevoegen",
+        page="film_aanmaken",
+        form=create_film_form
+    )
+
+
+@app.route('/film/<id>', methods=['GET'])
+def film():
+    # get film data and put it in a form
+
+    return render_template(
+        'base.html',
+        title="",  # add film title
+        page="film"
+    )
+
+
+@app.route('/film/<id>', methods=['DELETE', 'PATCH'])
+@login_required
+def modify_film():
+    form = request.form
+    if request.method == 'DELETE':
+        film = Film.query.get(form.get('filmId'))
+        db.session.delete(film)
+        db.session.commit()
+
+    if request.method == 'PATCH':
+        film = Film.query.get(form.get('filmId'))
+        acteur = Acteur.query.filter_by(id=form.get('acteurId'))
+        regisseur = Regisseur.query.filter_by(id=form.get('regisseurId'))
+        film.titel = form.get('titel')
+        film.acteur = acteur
+        film.regisseur = regisseur
+        db.session.add(film)
+        db.session.commit()

@@ -1,0 +1,25 @@
+<div class="container" style="margin-bottom: 120px">
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="post" class="text-center">
+                {{ form.hidden_tag() }}
+
+                <div class="form-outline mb-4">
+                    {{ form.titel.label }} {{ form.titel }}
+                </div>
+
+                <div class="form-outline mb-4">
+                    {{ form.regisseur.label }} {{ form.regisseur }}
+                </div>
+
+                <div class="form-outline mb-4">
+                    {{ form.acteur.label }} {{ form.acteur }}
+                </div>
+
+                <div class="text-center">
+                    {{ form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

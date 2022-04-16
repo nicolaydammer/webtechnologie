@@ -4,6 +4,6 @@
         <div class="small text-muted">{{ card.get('date') }}</div>
         <h2 class="card-title h4">{{ card.get('title') }}</h2>
         <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-        <a class="btn btn-primary" href="#!">Meer hierover →</a>
+        <a class="btn btn-primary" href="{{ url_for('film', id=card.get('id')) }}">Meer hierover →</a>
     </div>
 </div>
