@@ -36,6 +36,18 @@
     {% include "regisseur_aanmaken.html" %}
 {% endif %}
 
+{% if page == "acteur_bewerken" %}
+    {% include "acteur_bewerken.html" %}
+{% endif %}
+
+{% if page == "regisseur_bewerken" %}
+    {% include "regisseur_bewerken.html" %}
+{% endif %}
+
+{% if page == "film" %}
+    {% include "film.html" %}
+{% endif %}
+
 {% include "partials/footer.html" %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"

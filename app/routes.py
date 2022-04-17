@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, request
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 from app import app, login_manager, db
 from .Models.Acteur import Acteur
@@ -9,7 +9,10 @@ from .Models.User import User
 from .forms.CreateActeur import CreateActeur
 from .forms.CreateRegisseur import CreateRegisseur
 from .forms.CreateFilm import CreateFilm
+from .forms.FilmForm import FilmForm
 from .forms.LoginForm import LoginForm
+from .forms.ModifyActeur import ModifyActeur
+from .forms.ModifyRegisseur import ModifyRegisseur
 from .forms.RegisterForm import RegisterForm
 
 
@@ -20,37 +23,13 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
+    films = Film.query.all()
+    cards = [(film.id, film.titel, '17-04-2022') for film in films]
     return render_template(
         'base.html',
         title="Filmfan homepage",
         page="home",
-        cards=[
-            {
-                'id': '1',
-                'date': '15-4-2022',
-                'title': 'film1'
-            },
-            {
-                'id': '2',
-                'date': '16-4-2022',
-                'title': 'film2'
-            },
-            {
-                'id': '3',
-                'date': '17-4-2022',
-                'title': 'film3'
-            },
-            {
-                'id': '4',
-                'date': '18-4-2022',
-                'title': 'film4'
-            },
-            {
-                'id': '5',
-                'date': '19-4-2022',
-                'title': 'film5'
-            },
-        ]
+        cards=cards
     )
 
 
@@ -104,11 +83,13 @@ def create_film():
     create_film_form = CreateFilm()
     form = request.form
 
+    print(form)
     if create_film_form.validate_on_submit():
+        print('aanwezig')
         film = Film(form.get('titel'), form.get('regisseur'), form.get('acteur'))
         db.session.add(film)
         db.session.commit()
-        return redirect(url_for('film', id=film.id))
+        return redirect(url_for('film', film_id=film.id))
 
     return render_template(
         'base.html',
@@ -118,35 +99,40 @@ def create_film():
     )
 
 
-@app.route('/film/<id>', methods=['GET'])
-def film():
-    # get film data and put it in a form
+@app.route('/film/<film_id>', methods=['GET', 'POST'])
+def film(film_id):
+    form = request.form
+    film_form = FilmForm()
+    film = Film.query.filter_by(id=film_id).first()
+
+    if film_form.validate_on_submit() and current_user.is_authenticated:
+        film.titel = form.get('titel')
+        film.acteur = form.get('acteur')
+        film.regisseur = form.get('regisseur')
+
+        db.session.add(film)
+        db.session.commit()
+        return redirect(url_for('film', film_id=film_id))
+
+    film_form.titel.data = film.titel
+    film_form.regisseur.data = film.regisseur
+    film_form.acteur.data = film.acteur
 
     return render_template(
         'base.html',
-        title="",  # add film title
-        page="film"
+        title=film.titel,  # add film title
+        page="film",
+        form=film_form
     )
 
 
-@app.route('/film/<id>', methods=['DELETE', 'PATCH'])
+@app.route('/film/<film_id>', methods=['DELETE'])
 @login_required
-def modify_film():
-    form = request.form
-    if request.method == 'DELETE':
-        film = Film.query.get(form.get('filmId'))
-        db.session.delete(film)
-        db.session.commit()
-
-    if request.method == 'PATCH':
-        film = Film.query.get(form.get('filmId'))
-        acteur = Acteur.query.filter_by(id=form.get('acteurId'))
-        regisseur = Regisseur.query.filter_by(id=form.get('regisseurId'))
-        film.titel = form.get('titel')
-        film.acteur = acteur
-        film.regisseur = regisseur
-        db.session.add(film)
-        db.session.commit()
+def modify_film(film_id):
+    film = Film.query.get(film_id)
+    db.session.delete(film)
+    db.session.commit()
+    return "succes"
 
 
 @app.route('/acteur', methods=['GET', 'POST'])
@@ -191,7 +177,53 @@ def create_regisseur():
 
     return render_template(
         'base.html',
-        title="Filmfan acteur toevoegen",
-        page="acteur_aanmaken",
+        title="Filmfan regisseur toevoegen",
+        page="regisseur_aanmaken",
         form=create_regisseur_form
+    )
+
+
+@app.route('/regisseur/<regisseur_id>', methods=['GET', 'POST'])
+def regisseur(regisseur_id):
+    form = request.form
+    regisseur = Regisseur.query.filter_by(id=regisseur_id).first()
+    modify_regisseur_form = ModifyRegisseur()
+
+    if modify_regisseur_form.validate_on_submit():
+        regisseur.voornaam = form.get('voornaam')
+        regisseur.achternaam = form.get('achternaam')
+        db.session.add(regisseur)
+        db.session.commit()
+        return redirect(url_for('home'))
+
+    modify_regisseur_form.voornaam.data = regisseur.voornaam
+    modify_regisseur_form.achternaam.data = regisseur.achternaam
+    return render_template(
+        'base.html',
+        title="Filmfan regisseur bewerken",  # add film title
+        page="regisseur_bewerken",
+        form=modify_regisseur_form
+    )
+
+
+@app.route('/acteur/<acteur_id>', methods=['GET', 'POST'])
+def acteur(acteur_id):
+    form = request.form
+    acteur = Acteur.query.filter_by(id=acteur_id).first()
+    modify_acteur_form = ModifyActeur()
+
+    if modify_acteur_form.validate_on_submit():
+        acteur.voornaam = form.get('voornaam')
+        acteur.achternaam = form.get('achternaam')
+        db.session.add(acteur)
+        db.session.commit()
+        return redirect(url_for('home'))
+
+    modify_acteur_form.voornaam.data = acteur.voornaam
+    modify_acteur_form.achternaam.data = acteur.achternaam
+    return render_template(
+        'base.html',
+        title="Filmfan regisseur bewerken",  # add film title
+        page="regisseur_bewerken",
+        form=modify_acteur_form
     )
