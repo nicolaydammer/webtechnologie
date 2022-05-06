@@ -108,9 +108,9 @@ def film(film_id):
     film_form = FilmForm()
     film = Film.query.filter_by(id=film_id).first()
     comment_form = CommentForm()
-    comments = Comment.query.filter_by(id=film_id).all()
+    comments = Comment.query.filter_by(film=film_id).all()
 
-    comment_list = [(comment.id, comment.comment, User.query.filter_by(id=comment.user).first(),
+    comment_list = [(comment.id, comment.comment, User.query.filter_by(id=comment.user).first().username,
                      ) for comment in comments]
 
     if film_form.validate_on_submit() and current_user.is_authenticated:
@@ -123,7 +123,7 @@ def film(film_id):
         return redirect(url_for('home'))
 
     if comment_form.validate_on_submit() and current_user.is_authenticated:
-        comment = Comment(form.get('comment'), current_user.get_id(), film)
+        comment = Comment(form.get('comment'), current_user.get_id(), film_id)
         db.session.add(comment)
         db.session.commit()
         return redirect(url_for('film', film_id=film_id))
@@ -132,13 +132,15 @@ def film(film_id):
     film_form.regisseur.data = film.regisseur
     film_form.acteur.data = film.acteur
 
+    print(comment_list)
+
     return render_template(
         'base.html',
         title=film.titel,
         page="film.html",
         form=film_form,
         comment_form=comment_form,
-        comments=comment_list
+        comment_list=comment_list
     )
 
 
