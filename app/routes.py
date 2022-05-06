@@ -91,7 +91,7 @@ def create_film():
         film = Film(form.get('titel'), form.get('regisseur'), form.get('acteur'))
         db.session.add(film)
         db.session.commit()
-        return redirect(url_for('film'))
+        return redirect(url_for('home'))
 
     return render_template(
         'base.html',
@@ -114,7 +114,7 @@ def film(film_id):
 
         db.session.add(film)
         db.session.commit()
-        return redirect(url_for('film'))
+        return redirect(url_for('home'))
 
     film_form.titel.data = film.titel
     film_form.regisseur.data = film.regisseur
