@@ -12,8 +12,8 @@
                 {% for acteur in acteurs %}
                     <button type="button" class="list-group-item list-group-item-action">
                         {{ acteur.voornaam }} {{ acteur.achternaam }}
-                        <a href="{{ url_for('acteur', acteur_id=acteur.id) }}"><i class="fa-solid fa-pen"></i></a>
-                        <span class="delete_acteur" id="{{ acteur.id }}">
+                        <a class="align_right" href="{{ url_for('acteur', acteur_id=acteur.id) }}"><i class="fa-solid fa-pen"></i></a>
+                        <span class="align_right delete_acteur" id="{{ acteur.id }}">
                             <i class="fa-solid fa-trash-can"></i>
                         </span>
                     </button>

@@ -8,6 +8,7 @@ class Film(db.Model):
     titel = db.Column(db.String(50))
     regisseur = db.Column(db.Integer, db.ForeignKey('regisseurs.id'))
     acteur = db.Column(db.Integer, db.ForeignKey('acteurs.id'))
+    comment = db.Column(db.Integer, db.ForeignKey('comment.id'))
 
     def __init__(self, titel, regisseur, acteur):
         self.titel = titel

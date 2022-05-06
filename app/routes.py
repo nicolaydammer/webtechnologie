@@ -196,7 +196,7 @@ def regisseur(regisseur_id):
         regisseur.achternaam = form.get('achternaam')
         db.session.add(regisseur)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('regisseurs'))
 
     modify_regisseur_form.voornaam.data = regisseur.voornaam
     modify_regisseur_form.achternaam.data = regisseur.achternaam
@@ -219,14 +219,14 @@ def acteur(acteur_id):
         acteur.achternaam = form.get('achternaam')
         db.session.add(acteur)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('acteurs'))
 
     modify_acteur_form.voornaam.data = acteur.voornaam
     modify_acteur_form.achternaam.data = acteur.achternaam
     return render_template(
         'base.html',
-        title="Filmfan regisseur bewerken",  # add film title
-        page="regisseur_bewerken.html",
+        title="Filmfan acteur bewerken",  # add film title
+        page="acteur_bewerken.html",
         form=modify_acteur_form
     )
 
@@ -237,7 +237,7 @@ def acteurs():
     acteurs = Acteur.query.all()
     return render_template(
         'base.html',
-        title="Filmfan regisseur bewerken",  # add film title
+        title="Filmfan acteurs lijst",
         page="acteurs.html",
         acteurs=acteurs
     )
@@ -249,7 +249,7 @@ def regisseurs():
     regisseurs = Regisseur.query.all()
     return render_template(
         'base.html',
-        title="Filmfan regisseur bewerken",  # add film title
+        title="Filmfan regisseurs lijst",
         page="regisseurs.html",
         regisseurs=regisseurs
     )
