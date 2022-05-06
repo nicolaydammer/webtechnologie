@@ -2,3 +2,4 @@
 venv
 .env_example
 data.sqlite
+__pycache__
