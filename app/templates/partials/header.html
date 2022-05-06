@@ -22,6 +22,19 @@
                             </li>
                         </ul>
                     </div>
+
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Bewerken
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="{{ url_for('acteurs') }}">Acteurs</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('regisseurs') }}">Regisseurs</a>
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
                 {% if current_user.is_authenticated %}

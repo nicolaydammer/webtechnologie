@@ -28,7 +28,7 @@ def home():
     return render_template(
         'base.html',
         title="Filmfan homepage",
-        page="home",
+        page="home.html",
         cards=cards
     )
 
@@ -40,12 +40,14 @@ def login():
         user = User.query.filter_by(email=request.form.get('email')).first()
         if user is not None and user.verify_password(request.form.get('password')):
             login_user(user)
-        return redirect(url_for('home'))
+            return redirect(url_for('home'))
+
+        return redirect(url_for('login'))
 
     return render_template(
         'base.html',
         title="Filmfan login pagina",
-        page="login",
+        page="login.html",
         form=loginform
     )
 
@@ -65,7 +67,7 @@ def register():
     return render_template(
         'base.html',
         title="Filmfan register pagina",
-        page="register",
+        page="register.html",
         form=registerform
     )
 
@@ -94,7 +96,7 @@ def create_film():
     return render_template(
         'base.html',
         title="Filmfan film toevoegen",
-        page="film_aanmaken",
+        page="film_aanmaken.html",
         form=create_film_form
     )
 
@@ -121,7 +123,7 @@ def film(film_id):
     return render_template(
         'base.html',
         title=film.titel,  # add film title
-        page="film",
+        page="film.html",
         form=film_form
     )
 
@@ -154,7 +156,7 @@ def create_acteur():
     return render_template(
         'base.html',
         title="Filmfan acteur toevoegen",
-        page="acteur_aanmaken",
+        page="acteur_aanmaken.html",
         form=create_acteur_form
     )
 
@@ -178,7 +180,7 @@ def create_regisseur():
     return render_template(
         'base.html',
         title="Filmfan regisseur toevoegen",
-        page="regisseur_aanmaken",
+        page="regisseur_aanmaken.html",
         form=create_regisseur_form
     )
 
@@ -201,7 +203,7 @@ def regisseur(regisseur_id):
     return render_template(
         'base.html',
         title="Filmfan regisseur bewerken",  # add film title
-        page="regisseur_bewerken",
+        page="regisseur_bewerken.html",
         form=modify_regisseur_form
     )
 
@@ -224,6 +226,48 @@ def acteur(acteur_id):
     return render_template(
         'base.html',
         title="Filmfan regisseur bewerken",  # add film title
-        page="regisseur_bewerken",
+        page="regisseur_bewerken.html",
         form=modify_acteur_form
     )
+
+
+@app.route('/acteurs', methods=['GET'])
+@login_required
+def acteurs():
+    acteurs = Acteur.query.all()
+    return render_template(
+        'base.html',
+        title="Filmfan regisseur bewerken",  # add film title
+        page="acteurs.html",
+        acteurs=acteurs
+    )
+
+
+@app.route('/regisseurs', methods=['GET'])
+@login_required
+def regisseurs():
+    regisseurs = Regisseur.query.all()
+    return render_template(
+        'base.html',
+        title="Filmfan regisseur bewerken",  # add film title
+        page="regisseurs.html",
+        regisseurs=regisseurs
+    )
+
+
+@app.route('/acteur/<acteur_id>', methods=['DELETE'])
+@login_required
+def delete_acteur(acteur_id):
+    acteur = Acteur.query.get(acteur_id)
+    db.session.delete(acteur)
+    db.session.commit()
+    return "succes"
+
+
+@app.route('/regisseur/<regisseur_id>', methods=['DELETE'])
+@login_required
+def delete_regisseur(regisseur_id):
+    regisseur = Regisseur.query.get(regisseur_id)
+    db.session.delete(regisseur)
+    db.session.commit()
+    return "succes"

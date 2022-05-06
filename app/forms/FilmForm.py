@@ -15,7 +15,7 @@ class FilmForm(FlaskForm):
     titel = StringField('Titel:', validators=[DataRequired()])
     regisseur = SelectField('Regisseur:', coerce=int, validators=[DataRequired()])
     acteur = SelectField('Acteur:', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('Opslaan')
+    submit = SubmitField('Film opslaan')
 
     def validate_regisseur(self, field):
         if not Regisseur.query.filter_by(id=field.data).first():
