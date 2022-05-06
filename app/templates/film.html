@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="form-outline mb-4 comment_box">
-                    {{ form.beschrijving.label }} <br /> {{ form.beschrijving }}
+                    {{ form.beschrijving.label }} <br/> {{ form.beschrijving }}
                 </div>
 
                 <div class="form-outline mb-4">
@@ -34,11 +34,19 @@
                     </div>
                 {% endif %}
             </form>
+
             <br/>
             <br/>
+
             {% for comment in comment_list %}
-                <button id={{ comment[0] }} type="button" class="list-group-item list-group-item-action">
-                    {{ comment[2] }} <br/>
+                <button id="{{ comment[0] }}" type="button" class="list-group-item list-group-item-action">
+                    Geschreven door: {{ comment[2] }}
+                    {% if current_user.is_authenticated and current_user.id == comment[3] %}
+                        <span class="align_right delete_comment" id="{{ comment[0] }}">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </span>
+                    {% endif %}
+                    <br />
                     {{ comment[1] }}
                 </button>
             {% endfor %}
@@ -57,6 +65,9 @@
                         {{ comment_form.submit() }}
                     </div>
                 </form>
+            {% else %}
+                <div class="mb_30">
+                </div>
             {% endif %}
         </div>
     </div>

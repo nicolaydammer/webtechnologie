@@ -111,7 +111,7 @@ def film(film_id):
     comments = Comment.query.filter_by(film=film_id).all()
 
     comment_list = [(comment.id, comment.comment, User.query.filter_by(id=comment.user).first().username,
-                     ) for comment in comments]
+                     int(User.query.filter_by(id=comment.user).first().id)) for comment in comments]
 
     if film_form.validate_on_submit() and current_user.is_authenticated:
         film.titel = form.get('titel')
@@ -287,3 +287,14 @@ def delete_regisseur(regisseur_id):
     db.session.delete(regisseur)
     db.session.commit()
     return "succes"
+
+
+@app.route('/comment/<comment_id>', methods=['DELETE'])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get(comment_id)
+    if current_user.id == comment.user:
+        db.session.delete(comment)
+        db.session.commit()
+        return "succes"
+    return "false"

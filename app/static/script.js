@@ -42,11 +42,18 @@ $(document).ready(function () {
             location.reload(true);
         })
     })
+
+    $(".delete_comment").on('click', function (event) {
+        let comment_id = event.currentTarget.id
+        let url = "/comment/" + comment_id
+        $.ajax({
+            url: url,
+            method: "DELETE"
+        }).done(function () {
+            location.reload(true);
+        })
+    })
 })
-
-
-
-
 
 function goTo(url) {
     location.href=url;
