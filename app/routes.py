@@ -26,7 +26,7 @@ def load_user(user_id):
 @app.route('/')
 def home():
     films = Film.query.all()
-    cards = [(film.id, film.titel, '17-04-2022', Regisseur.query.filter_by(id=film.regisseur).first(),
+    cards = [(film.id, film.titel, '06-05-2022', Regisseur.query.filter_by(id=film.regisseur).first(),
               Acteur.query.filter_by(id=film.acteur).first(), film.beschrijving) for film in films]
     return render_template(
         'base.html',
