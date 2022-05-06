@@ -3,9 +3,11 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 from app import app, login_manager, db
 from .Models.Acteur import Acteur
+from .Models.Comment import Comment
 from .Models.Film import Film
 from .Models.Regisseur import Regisseur
 from .Models.User import User
+from .forms.CommentForm import CommentForm
 from .forms.CreateActeur import CreateActeur
 from .forms.CreateRegisseur import CreateRegisseur
 from .forms.CreateFilm import CreateFilm
@@ -86,9 +88,7 @@ def create_film():
     create_film_form = CreateFilm()
     form = request.form
 
-    print(form)
     if create_film_form.validate_on_submit():
-        print('aanwezig')
         film = Film(form.get('titel'), form.get('regisseur'), form.get('acteur'))
         db.session.add(film)
         db.session.commit()
@@ -107,6 +107,11 @@ def film(film_id):
     form = request.form
     film_form = FilmForm()
     film = Film.query.filter_by(id=film_id).first()
+    comment_form = CommentForm()
+    comments = Comment.query.filter_by(id=film_id).all()
+
+    comment_list = [(comment.id, comment.comment, User.query.filter_by(id=comment.user).first(),
+                     ) for comment in comments]
 
     if film_form.validate_on_submit() and current_user.is_authenticated:
         film.titel = form.get('titel')
@@ -117,15 +122,23 @@ def film(film_id):
         db.session.commit()
         return redirect(url_for('home'))
 
+    if comment_form.validate_on_submit() and current_user.is_authenticated:
+        comment = Comment(form.get('comment'), current_user.get_id(), film)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('film', film_id=film_id))
+
     film_form.titel.data = film.titel
     film_form.regisseur.data = film.regisseur
     film_form.acteur.data = film.acteur
 
     return render_template(
         'base.html',
-        title=film.titel,  # add film title
+        title=film.titel,
         page="film.html",
-        form=film_form
+        form=film_form,
+        comment_form=comment_form,
+        comments=comment_list
     )
 
 

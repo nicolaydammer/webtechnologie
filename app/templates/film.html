@@ -1,7 +1,8 @@
 <div class="container" style="margin-bottom: 120px">
     <div class="row">
         <div class="col-lg-2">
-            <button onclick="goTo('{{ url_for("home") }}')" type="button" class="btn mb-2 mb-md-0 btn-secondary btn-block btn-round">
+            <button onclick="goTo('{{ url_for("home") }}')" type="button"
+                    class="btn mb-2 mb-md-0 btn-secondary btn-block btn-round">
                 <i class="fa-solid fa-angle-left"></i>
                 <span>Naar film overzicht</span>
             </button>
@@ -29,6 +30,29 @@
                     </div>
                 {% endif %}
             </form>
+
+            {% for comment in comment_list %}
+                <button id={{ comment[0] }} type="button" class="list-group-item list-group-item-action">
+                    {{ comment[2].voornaam }} {{ comment[2].achternaam }} <br />
+                    {{ comment[1] }}
+                </button>
+            {% endfor %}
+
+            {% if current_user.is_authenticated %}
+                <br/>
+                <br/>
+                <form method="post" class="text-center">
+                {{ form.hidden_tag() }}
+                    <div class="form-outline mb-4 comment_box">
+                        {{ comment_form.comment.label }} <br/>
+                        {{ comment_form.comment }}
+                    </div>
+
+                    <div class="text-center">
+                        {{ comment_form.submit() }}
+                    </div>
+                </form>
+            {% endif %}
         </div>
     </div>
 </div>
