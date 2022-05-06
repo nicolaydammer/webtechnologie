@@ -14,12 +14,20 @@ windows: .\venv\Scripts\activate
 
 windows:
 SET FLASK_APP=filmfan.py
+
 SET FLASK_ENV=development
 
 linux/mac:
 export FLASK_APP=filmfan.py
+
 export FLASK_ENV=development
 
 pip install -r requirements.txt
 
 flask run
+
+Test account:
+
+gebruikersnaam: testuser@test.nl
+
+wachtwoord: testuser123
