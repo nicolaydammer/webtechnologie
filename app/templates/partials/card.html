@@ -3,6 +3,8 @@
     <div class="card-body">
         <div class="small text-muted">{{ card[2] }}</div>
         <h2 class="card-title h4">{{ card[1] }}</h2>
+        <p class="card-text">Regisseur: {{ card[3].voornaam }} {{ card[3].achternaam }}</p>
+        <p class="card-text">Acteur: {{ card[4].voornaam }} {{ card[4].achternaam }}</p>
         <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
         <a class="btn btn-primary" href="{{ url_for('film', film_id=card[0]) }}">Meer hierover →</a>
     </div>
