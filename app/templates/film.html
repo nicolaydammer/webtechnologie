@@ -15,6 +15,10 @@
                     {{ form.titel.label }} {{ form.titel }}
                 </div>
 
+                <div class="form-outline mb-4 comment_box">
+                    {{ form.beschrijving.label }} <br /> {{ form.beschrijving }}
+                </div>
+
                 <div class="form-outline mb-4">
                     {{ form.regisseur.label }} {{ form.regisseur }}
                 </div>
@@ -30,11 +34,11 @@
                     </div>
                 {% endif %}
             </form>
-            <br />
-            <br />
+            <br/>
+            <br/>
             {% for comment in comment_list %}
                 <button id={{ comment[0] }} type="button" class="list-group-item list-group-item-action">
-                    {{ comment[2] }} <br />
+                    {{ comment[2] }} <br/>
                     {{ comment[1] }}
                 </button>
             {% endfor %}
@@ -43,7 +47,7 @@
                 <br/>
                 <br/>
                 <form method="post" class="text-center mb_30">
-                {{ form.hidden_tag() }}
+                    {{ form.hidden_tag() }}
                     <div class="form-outline mb-4 comment_box">
                         {{ comment_form.comment.label }} <br/>
                         {{ comment_form.comment }}

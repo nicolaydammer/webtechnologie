@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField
+from wtforms import StringField, SelectField, SubmitField, TextAreaField
 from app.Models.Acteur import Acteur
 from app.Models.Regisseur import Regisseur
 from wtforms.validators import DataRequired, ValidationError
@@ -13,6 +13,7 @@ class CreateFilm(FlaskForm):
                                   Regisseur.query.all()]
 
     titel = StringField('Titel:', validators=[DataRequired()])
+    beschrijving = TextAreaField('Beschrijving:', validators=[DataRequired()])
     regisseur = SelectField('Regisseur:', coerce=int, validators=[DataRequired()])
     acteur = SelectField('Acteur:', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Toevoegen')

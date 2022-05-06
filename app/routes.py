@@ -27,7 +27,7 @@ def load_user(user_id):
 def home():
     films = Film.query.all()
     cards = [(film.id, film.titel, '17-04-2022', Regisseur.query.filter_by(id=film.regisseur).first(),
-              Acteur.query.filter_by(id=film.acteur).first()) for film in films]
+              Acteur.query.filter_by(id=film.acteur).first(), film.beschrijving) for film in films]
     return render_template(
         'base.html',
         title="Filmfan homepage",
@@ -89,7 +89,7 @@ def create_film():
     form = request.form
 
     if create_film_form.validate_on_submit():
-        film = Film(form.get('titel'), form.get('regisseur'), form.get('acteur'))
+        film = Film(form.get('titel'), form.get('regisseur'), form.get('acteur'), form.get('beschrijving'))
         db.session.add(film)
         db.session.commit()
         return redirect(url_for('home'))
@@ -115,6 +115,7 @@ def film(film_id):
 
     if film_form.validate_on_submit() and current_user.is_authenticated:
         film.titel = form.get('titel')
+        film.beschrijving = form.get('beschrijving')
         film.acteur = form.get('acteur')
         film.regisseur = form.get('regisseur')
 
@@ -129,10 +130,9 @@ def film(film_id):
         return redirect(url_for('film', film_id=film_id))
 
     film_form.titel.data = film.titel
+    film_form.beschrijving.data = film.beschrijving
     film_form.regisseur.data = film.regisseur
     film_form.acteur.data = film.acteur
-
-    print(comment_list)
 
     return render_template(
         'base.html',
